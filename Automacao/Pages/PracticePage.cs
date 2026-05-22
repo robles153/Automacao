@@ -19,13 +19,19 @@ public class PracticePage
 
     public void Executar(DadosTeste dadosTeste)
     {
-        AcessarPagina();
+        RetryHelper.Executar("Acessar practice page", AcessarPagina);
 
-        PreencherShadowDom(dadosTeste.Usuario);
+        RetryHelper.Executar(
+            "Preencher shadow DOM",
+            () => PreencherShadowDom(dadosTeste.Usuario));
 
-        PreencherPizzaNestedShadowDom(dadosTeste.Pizza);
+        RetryHelper.Executar(
+            "Preencher nested shadow DOM",
+            () => PreencherPizzaNestedShadowDom(dadosTeste.Pizza));
 
-        MarcarPrimeiraLinhaTabela();
+        RetryHelper.Executar(
+            "Marcar primeira linha da tabela",
+            MarcarPrimeiraLinhaTabela);
     }
 
     private void AcessarPagina()

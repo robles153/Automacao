@@ -1,3 +1,4 @@
+using Automacao.Helpers;
 using Automacao.Models;
 using Automacao.Repositories;
 using OpenQA.Selenium;
@@ -19,9 +20,9 @@ public class IframeShadowDomPage
 
     public void Executar( DadosTeste dadosTeste)
     {
-        AcessarPagina();
+        RetryHelper.Executar("Acessar página iframe shadow DOM", AcessarPagina);
 
-        ClicarLearningHubNoShadowDom();
+        RetryHelper.Executar("Clicar Learning Hub no shadow DOM", ClicarLearningHubNoShadowDom);
 
         InteragirComIframes( dadosTeste.CurrentCrushName, dadosTeste.Destiny);
     }
@@ -124,21 +125,37 @@ public class IframeShadowDomPage
 
     private void InteragirComIframes(string currentCrushName, string destiny)
     {
-        EntrarIframeComCurrentCrushName();
+        RetryHelper.Executar(
+            "Entrar iframe dentro do shadow DOM",
+            EntrarIframeComCurrentCrushName);
 
-        PreencherCurrentCrushName(currentCrushName);
+        RetryHelper.Executar(
+            "Preencher Current Crush Name",
+            () => PreencherCurrentCrushName(currentCrushName));
 
-        ClicarConnectNow();
+        RetryHelper.Executar(
+            "Clicar Connect Now",
+            ClicarConnectNow);
 
-        var confirmacao = CapturarConfirmacaoIframe();
+        var confirmacao = string.Empty;
+
+        RetryHelper.Executar(
+            "Capturar confirmação iframe",
+            () => confirmacao = CapturarConfirmacaoIframe());
 
         SalvarExecucao("Ler confirmação iframe", confirmacao);
 
-        EntrarNestedIframe();
+        RetryHelper.Executar(
+            "Entrar nested iframe",
+            EntrarNestedIframe);
 
-        PreencherDestiny(destiny);
+        RetryHelper.Executar(
+            "Preencher Destiny",
+            () => PreencherDestiny(destiny));
 
-        ClicarCloseIt();
+        RetryHelper.Executar(
+            "Clicar Close It",
+            ClicarCloseIt);
 
         _driver
             .SwitchTo()
