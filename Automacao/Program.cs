@@ -19,6 +19,7 @@ try
 
     var configuration =
         new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.json")
             .Build();
 
